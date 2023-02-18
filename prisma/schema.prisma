@@ -25,7 +25,7 @@ model Product {
   thumbnail    String
   price        Float
   quantity     Int
-  status       ProductStatus
+  status       ProductStatus @default(PUBLISHED)
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
   categoryId   Int           @map("category_id")
