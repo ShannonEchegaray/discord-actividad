@@ -1,11 +1,8 @@
+import { prisma } from '../shared/prisma-client';
+
 export default {
   async getAll() {
-    return [
-      {
-        id: 1,
-        name: 'Category name',
-      },
-    ];
+    return prisma.category.findMany();
   },
   async getOne() {
     //
