@@ -11,26 +11,50 @@ datasource db {
 }
 
 model Category {
-  id      Int       @id @default(autoincrement())
-  name    String
-  Product Product[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
 
   @@map("categories")
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
-  description String
-  thumbnail   String
-  price       Float
-  quantity    Int
-  status      ProductStatus
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
-  categoryId  Int           @map("category_id")
-  category    Category      @relation(fields: [categoryId], references: [id])
+  id           Int           @id @default(autoincrement())
+  description  String
+  thumbnail    String
+  price        Float
+  quantity     Int
+  status       ProductStatus
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  categoryId   Int           @map("category_id")
+  category     Category      @relation(fields: [categoryId], references: [id])
+  orderDetails OrderDetail[]
 
   @@map("products")
+}
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @default(now()) @updatedAt @map("updated_at")
+  customerName    String        @map("customer_name")
+  customerAddress String        @map("customer_address")
+  orderDetails    OrderDetail[]
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Float
+  orderId   Int     @map("order_id")
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_details")
 }
 
 enum ProductStatus {
