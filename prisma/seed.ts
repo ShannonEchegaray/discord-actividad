@@ -25,6 +25,23 @@ const categoryList = [
   'Industrial & Scientific',
 ];
 
+const productList = [
+  {
+    title: 'Zapatos para correr',
+    description: 'Zapatos para correr de alta calidad para hombre',
+    thumbnail: 'image.jpg',
+    price: 100,
+    quantity: 10,
+  },
+  {
+    title: 'Camiseta de algodón',
+    description: 'Camiseta de algodón suave y transpirable para mujer',
+    thumbnail: 'image.jpg',
+    price: 20,
+    quantity: 20,
+  },
+];
+
 async function main() {
   const categories = await prisma.category.findMany();
 
@@ -32,6 +49,28 @@ async function main() {
     await prisma.category.createMany({
       data: categoryList.map((category) => ({ name: category })),
     });
+  }
+
+  const products = await prisma.product.findMany();
+  if (!products.length) {
+    const category = await prisma.category.findFirst({
+      where: {
+        name: 'Fashion & Accessories',
+      },
+    });
+
+    for (let product of productList) {
+      await prisma.product.create({
+        data: {
+          ...product,
+          category: {
+            connect: {
+              id: category.id,
+            },
+          },
+        },
+      });
+    }
   }
 }
 
