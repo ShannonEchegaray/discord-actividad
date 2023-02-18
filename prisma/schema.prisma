@@ -20,6 +20,7 @@ model Category {
 
 model Product {
   id           Int           @id @default(autoincrement())
+  title        String
   description  String
   thumbnail    String
   price        Float
