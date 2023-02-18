@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/api.ts",
-    "prisma:migration": "prisma format && prisma generate && prisma migrate dev"
+    "prisma:migration": "prisma format && prisma generate && prisma migrate dev",
+    "prisma:seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",
