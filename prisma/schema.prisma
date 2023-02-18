@@ -19,21 +19,21 @@ model Category {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   description String
   thumbnail   String
   price       Float
   quantity    Int
-  status      Status
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
-  categoryId  Int      @map("category_id")
-  category    Category @relation(fields: [categoryId], references: [id])
+  status      ProductStatus
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+  categoryId  Int           @map("category_id")
+  category    Category      @relation(fields: [categoryId], references: [id])
 
   @@map("products")
 }
 
-enum Status {
+enum ProductStatus {
   PUBLISHED
   DRAFT
 }
