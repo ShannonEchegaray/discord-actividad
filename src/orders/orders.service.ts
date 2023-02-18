@@ -2,19 +2,24 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 export default {
   async getAll() {
-    return [
-      {
-        id: 1,
-        name: 'Category name',
-      },
-    ];
+    const data = await prisma.order.findMany({});
+
+    return data;
+    // [
+    //   {
+    //     id: 1,
+    //     name: 'Category name',
+    //   },
+    // ];
   },
   async getOne(id) {
-    //
-    throw new Error('Not implemented yet.');
+    const item = await prisma.order.findFirst({ where: { id: parseInt(id) } });
+    return item;
   },
   async create(order) {
     //
+    const newOrder = prisma.order.create({ data: order });
+    return newOrder;
     throw new Error('Not implemented yet.');
   },
   async update(id, order) {
