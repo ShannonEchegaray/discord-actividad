@@ -4,11 +4,12 @@ import categoriesService from './categories.service';
 export default {
   async getAll(req: Request, res: Response) {
     const data = await categoriesService.getAll();
-
     res.status(200).json(data);
   },
-  async getOne() {
+  async getOne(req: Request, res:Response) {
     //
+    const data = await categoriesService.getOne(Number(req.params.id));
+    res.status(200).json(data);
   },
   async create() {
     //
