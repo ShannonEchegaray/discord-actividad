@@ -1,4 +1,6 @@
 import type { Request, Response } from 'express';
+// import type { Product } from '@prisma/client';
+
 import ordersService from './orders.service';
 
 /* const mock = {
@@ -16,6 +18,19 @@ import ordersService from './orders.service';
   }
 } */
 
+// type ProductBody = Pick<Product, 'id' | 'title' | 'price'>;
+
+// type body = {
+//   customerName: string;
+//   customerAddress: string;
+//   products: ProductBody[];
+// };
+//
+// type detailOrder = {
+//   quantity: number;
+//   product: number;
+// };
+
 export default {
   async getAll(req: Request, res: Response) {
     const data = await ordersService.getAll();
@@ -28,57 +43,37 @@ export default {
   },
 
   async create(req: Request, res: Response) {
-    type body = {
-      customerName: String;
-      customerAddress: String;
-      products: Array<productsBody>
-    }
+    const { customerName, customerAddress, products } = req.body;
 
-    type productsBody = {
-      id: Number;
-      quantity: Number;
-    }
+    const order = await ordersService.create({
+      customer: {
+        name: customerName,
+        address: customerAddress,
+      },
+      products,
+    });
 
-    type detailOrder = {
-      quantity: Number;
-      product: Number;
-    }
-    
-    const {customerName, customerAddress, products}: body = req.body;
-    const productsMap: Array<detailOrder> = products.map(({id, quantity}) => ({
-      quantity: quantity,
-      product: id,
-    }))
-    console.log(productsMap)
-    const newOrder = await ordersService.create(
-      {
-        customerName,
-        customerAddress,
-        orderDetails: {create: productsMap}
-      }
-    );
-    res.status(201).json(newOrder);
+    res.status(201).json(order);
   },
 
   async update(req: Request, res: Response) {
-
-    type orderDetail ={
-      id: Number;
-      quantity: Number;
-      price: Number;
-    }
+    type orderDetail = {
+      id: number;
+      quantity: number;
+      price: number;
+    };
 
     type Body = {
-      customerAddress?: String;
+      customerAddress?: string;
       orderDetails?: Array<orderDetail>;
-    }
+    };
 
-    const {customerAddress, orderDetails}: Body = req.body;
+    const { customerAddress, orderDetails }: Body = req.body;
     const error = await ordersService.update(Number(req.params.id), {
       customerAddress,
-      orderDetails
+      orderDetails,
     });
-    if(error){
+    if (error) {
       res.status(500).send(error);
     } else {
       res.status(204).end();
@@ -87,8 +82,8 @@ export default {
 
   async delete(req: Request, res: Response) {
     const error = await ordersService.delete(Number(req.params.id));
-    if(error){ 
-      res.status(500).send(error)
+    if (error) {
+      res.status(500).send(error);
     } else {
       res.status(204).end();
     }
