@@ -3,11 +3,10 @@ import { prisma } from '../shared/prisma-client';
 
 export default {
   async getAll() {
-    const records = await prisma.product.findMany();
-    return records;
+    return prisma.product.findMany();
   },
   async getOne(id) {
-    const record = await prisma.product.findUnique({
+    return prisma.product.findUnique({
       where: {
         id,
       },
@@ -15,13 +14,11 @@ export default {
         category: true,
       },
     });
-
-    return record;
   },
   async create(data: Product) {
     const { title, description, thumbnail, price, quantity, categoryId } = data;
 
-    const record = await prisma.product.create({
+    return prisma.product.create({
       data: {
         title,
         description,
@@ -39,8 +36,6 @@ export default {
         category: true,
       },
     });
-
-    return record;
   },
   async update(id, data: Product) {
     const {
@@ -53,7 +48,7 @@ export default {
       categoryId,
     } = data;
 
-    const record = await prisma.product.update({
+    return prisma.product.update({
       where: {
         id,
       },
@@ -75,8 +70,6 @@ export default {
         category: true,
       },
     });
-
-    return record;
   },
   async delete(id) {
     await prisma.product.delete({

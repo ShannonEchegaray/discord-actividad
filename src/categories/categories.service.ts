@@ -2,14 +2,11 @@ import { prisma } from '../shared/prisma-client';
 
 export default {
   async getAll() {
-    return prisma.category.findMany({
-      include: {
-        products: true,
-      },
-    });
+    return prisma.category.findMany();
   },
-  async getOne() {
+  async getOne(id) {
     //
+    return prisma.category.findUnique({ where: id});
   },
   async create() {
     //
